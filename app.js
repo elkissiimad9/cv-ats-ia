@@ -1,6 +1,18 @@
-/* =====================  ATS CV — app.js (complet)  ===================== */
+/* =====================  ATS CV — app.js (complet, avec IA DeepSeek)  ===================== */
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+/* === ENDPOINT IA (serveur Vercel: api/deepseek-generate.js) === */
+const AI_ENDPOINT = "/api/deepseek-generate";
+async function generateWithAI(jd) {
+  const res = await fetch(AI_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jd, locale: "fr" })
+  });
+  if (!res.ok) throw new Error("IA indisponible");
+  return await res.json(); // { title, summary, skills[], experiences[] }
+}
 
 const state = {
   jd: "",
@@ -21,7 +33,7 @@ const state = {
   },
 };
 
-/* ===================== IA locale améliorée ===================== */
+/* ===================== IA locale améliorée (fallback) ===================== */
 // utils
 const cap  = s => s.replace(/(^.|[\s-].)/g, m => m.toUpperCase());
 const pick = arr => arr[Math.floor(Math.random()*arr.length)];
@@ -344,19 +356,40 @@ function bind(){
   };
 }
 
-/* ================ Auto-génération (écrit aussi dans les inputs) ================ */
-function maybeAutoGen(){
+/* ================ Auto-génération (via IA DeepSeek, fallback local) ================ */
+async function maybeAutoGen(){
   if(!state.autoGen || !state.jd.trim()) return;
-  const role = inferRoleFromJD(state.jd, state.profile.title);
-  state.profile.title   = role;
-  state.profile.summary = generateSummaryFromJD(state.jd, role);
-  state.profile.skills  = generateSkillsFromJD(state.jd);
-  state.profile.experiences = generateExperiencesFromJD(state.jd, role);
 
-  // refléter pour modification
+  // 1) Essaye l'IA DeepSeek
+  try{
+    const out = await generateWithAI(state.jd);
+
+    state.profile.title       = out.title || state.profile.title;
+    state.profile.summary     = out.summary || state.profile.summary;
+    state.profile.skills      = (out.skills || []).map(s => ({ category: s.category, details: s.details }));
+    state.profile.experiences = (out.experiences || []).map(e => ({
+      role: e.role, company: e.company, period: e.period, bullets: e.bullets
+    }));
+
+  }catch(err){
+    console.warn("DeepSeek indisponible, fallback local.", err);
+
+    // 2) Fallback local (ton ancienne logique)
+    const role = inferRoleFromJD(state.jd, state.profile.title);
+    state.profile.title   = role;
+    state.profile.summary = generateSummaryFromJD(state.jd, role);
+    state.profile.skills  = generateSkillsFromJD(state.jd);
+    state.profile.experiences = generateExperiencesFromJD(state.jd, role);
+  }
+
+  // 3) refléter pour modification + rafraîchir l’UI
   document.getElementById("title").value   = state.profile.title;
   document.getElementById("summary").value = state.profile.summary;
   document.getElementById("skills").value  = skillsToText(state.profile.skills);
+
+  renderEditors();
+  renderEduEditors();
+  updatePreview();
 }
 
 /* ================ Init + petits tests ================ */
