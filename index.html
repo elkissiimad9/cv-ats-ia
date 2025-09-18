@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Générateur CV ATS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Impression: imprime UNIQUEMENT l’aperçu en A4 */
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .no-print { display:none !important; }
+      body * { visibility:hidden; }
+      #preview, #preview * { visibility:visible; }
+      #preview { position:absolute; left:0; top:0; width:210mm; margin:0; border:none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top no-print">
+    <h1>Générateur de CV ATS</h1>
+    <p>Collez la <strong>description du poste</strong> ➜ Résumé, Compétences & Expériences se génèrent automatiquement (modifiables), puis exportez en PDF.</p>
+  </header>
+
+  <main class="layout">
+    <!-- Panneau édition -->
+    <section class="panel no-print">
+      <h2>Entrées & Édition</h2>
+
+      <label class="lbl">Job Description (coller ici)</label>
+      <textarea id="jd" rows="7" class="input" placeholder="Collez ici la description du poste…"></textarea>
+
+      <label class="switch">
+        <input type="checkbox" id="autogen" checked>
+        <span>Auto-générer Résumé / Compétences / Expériences</span>
+      </label>
+
+      <div class="grid2">
+        <div>
+          <label class="lbl">Nom</label>
+          <input id="name" class="input" type="text" value="NOM PRÉNOM">
+        </div>
+        <div>
+          <label class="lbl">Titre (généré)</label>
+          <input id="title" class="input" type="text" value="SOCIAL MANAGER">
+        </div>
+        <div>
+          <label class="lbl">Email</label>
+          <input id="email" class="input" type="email" value="email@exemple.com">
+        </div>
+        <div>
+          <label class="lbl">Téléphone</label>
+          <input id="phone" class="input" type="text" value="+212 6 00 00 00 00">
+        </div>
+        <div class="full">
+          <label class="lbl">Localisation</label>
+          <input id="location" class="input" type="text" value="Ville, Pays">
+        </div>
+      </div>
+
+      <label class="lbl">Résumé professionnel</label>
+      <textarea id="summary" rows="4" class="input">Résumé professionnel généré automatiquement.</textarea>
+
+      <label class="lbl">Compétences (1 ligne = « Catégorie : détails… »)</label>
+      <textarea id="skills" rows="6" class="input"></textarea>
+
+      <!-- ÉDUCATION (édition) -->
+      <div class="panel-row" style="margin-top:10px">
+        <h3>Éducation</h3>
+        <button id="addEdu" class="btn ghost">+ Ajouter</button>
+      </div>
+      <div id="eduList" class="exp-list"></div>
+
+      <!-- EXPÉRIENCES (édition) -->
+      <div class="panel-row">
+        <h3>Expériences</h3>
+        <button id="addExp" class="btn ghost">+ Ajouter</button>
+      </div>
+      <div id="expList" class="exp-list"></div>
+
+      <div class="panel-actions">
+        <button id="reset" class="btn ghost">Réinitialiser</button>
+      </div>
+    </section>
+
+    <!-- Aperçu CV (imprimé) -->
+    <section class="preview-wrap">
+      <div class="toolbar no-print">
+        <span id="exportInfo" class="muted"></span>
+        <div class="right">
+          <button id="print" class="btn outline">Télécharger PDF (fiable)</button>
+          <button id="download" class="btn">Télécharger PDF (auto)</button>
+        </div>
+      </div>
+
+      <div id="preview" class="preview" data-preview="cv">
+        <!-- En-tête -->
+        <div class="cv-head">
+          <div id="p_name" class="cv-name">NOM PRÉNOM</div>
+          <div id="p_title" class="cv-title">SOCIAL MANAGER</div>
+          <div id="p_contacts" class="cv-contacts">email@exemple.com | +212 6 00 00 00 00</div>
+        </div>
+
+        <!-- Résumé -->
+        <div class="cv-section">
+          <p id="p_summary"></p>
+        </div>
+
+        <div class="cv-divider"><span>EXPÉRIENCES PROFESSIONNELLES</span></div>
+        <div id="p_experiences" class="cv-section"></div>
+
+        <div class="cv-divider"><span>EDUCATION</span></div>
+        <div id="p_education" class="cv-section"></div>
+
+        <div class="cv-divider"><span>COMPÉTENCES CLÉS</span></div>
+        <div class="cv-section">
+          <ul id="p_skills" class="skills-list"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+:root{
+  --ink:#0b1220;
+  --bg:#f6f6f6;
+  --card:#ffffff;
+  --border:#e5e7eb;
+  --muted:#475569;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:#111;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;
+}
+.top{max-width:1200px;margin:16px auto 0;padding:0 18px}
+.top h1{margin:0 0 6px;font-size:28px;font-weight:800}
+.top p{margin:0;color:#334155}
+
+.layout{max-width:1200px;margin:10px auto 30px;padding:0 18px;display:grid;grid-template-columns:420px 1fr;gap:22px}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}}
+
+.panel{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; position:sticky; top:12px; align-self:start;}
+.panel h2{margin:0 0 12px;font-size:22px;font-weight:800}
+.lbl{display:block;margin:10px 0 6px;font-weight:700}
+.input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;font-size:14px}
+.input:focus{outline:none;border-color:#111;box-shadow:0 0 0 2px rgba(0,0,0,.12)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2 .full{grid-column:1/-1}
+.switch{display:flex;align-items:center;gap:8px;margin:10px 0;font-weight:600}
+
+.panel-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.exp-list .exp-edit{border:1px dashed var(--border);border-radius:12px;padding:10px;margin:10px 0;background:#fff}
+.exp-edit .cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.exp-edit .cols3{display:grid;grid-template-columns:1fr 1fr 120px;gap:8px}
+.panel-actions{margin-top:8px}
+
+.btn{background:#111;color:#fff;border:none;padding:9px 14px;border-radius:10px;font-weight:800;cursor:pointer}
+.btn:hover{opacity:.95}
+.btn.ghost{background:#fff;color:#111;border:1px solid #111}
+.btn.outline{background:#fff;color:#111;border:1px solid var(--border)}
+.muted{color:#64748b;font-size:12px}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.preview{width:794px; margin:0 auto; background:#fff; border:1px solid var(--border); border-radius:12px; overflow:hidden}
+
+/* Header CV */
+.cv-head{background:var(--ink);color:#fff;text-align:center;padding:22px 24px}
+.cv-name{font-size:28px;font-weight:800;letter-spacing:.3px}
+.cv-title{font-weight:800;margin-top:6px;letter-spacing:.2px}
+.cv-contacts{margin-top:8px;color:#f1f5f9;font-weight:700}
+
+.cv-section{padding:14px 24px}
+.cv-section p{margin:0;line-height:1.5}
+
+/* Divider barre + texte + barre */
+.cv-divider{display:flex;align-items:center;gap:10px;padding:6px 24px 0 24px}
+.cv-divider span{font-weight:800;letter-spacing:.3px}
+.cv-divider::before,.cv-divider::after{content:""; height:1px; background:#333; flex:1}
+
+/* Expériences */
+.block{margin:10px 0}
+.block-head{display:flex;justify-content:space-between;align-items:baseline}
+.role{font-weight:800}
+.period{color:#374151;font-size:12px}
+.bullets{margin:6px 0 0 0;padding-left:18px}
+.bullets li{margin:4px 0}
+
+/* Education */
+.edu-item{display:flex;justify-content:space-between}
+.edu-left .degree{font-weight:800}
+.edu-left .org{color:#374151}
+
+/* Compétences */
+.skills-list{padding-left:18px;margin:6px 0}
+.skills-list b{color:#111}
+
+/* éditeur éducation */
+#eduList .exp-edit { border:1px dashed var(--border);border-radius:12px;padding:10px;margin:10px 0;background:#fff }
+#eduList .cols { display:grid; grid-template-columns:1fr 1fr; gap:8px }
+#eduList .cols3 { display:grid; grid-template-columns:1fr 1fr 120px; gap:8px }
